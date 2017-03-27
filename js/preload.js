@@ -10,7 +10,16 @@ class Preload extends Phaser.State {
         this.load.script('UserInterface', 'js/entity/userInterface.js');
         
         this.load.image('bulwark', 'img/bulwark.png');
-        this.load.image('bigArrow', 'img/bigArrow.png');
+        this.load.image('bigArrow', 'img/longArrow.png');
+        this.load.image('flame', 'img/flame.png');
+        this.load.image('background', 'img/background.png');
+        this.load.image('engine', 'img/engine.png');
+        this.load.image('starfield', 'img/starfield.png');
+        this.load.image('starfield2', 'img/starfield2.png');
+        this.load.image('radar', 'img/radar.png');
+        this.load.image('verticalRadar', 'img/verticalRadar.png');
+        this.load.image('horizontalRadar', 'img/horizontalRadar.png');
+        this.load.image('status', 'img/status.png');
 
         // Pointers :
 //         this.load.image('pointer', 'img/laserPointer.png');
