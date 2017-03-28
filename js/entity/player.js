@@ -8,7 +8,7 @@ class Player extends Phaser.Sprite {
         this.body.drag.set(10);
         this._laserPointer();
       
-        this.speed = 25;
+        this.speed = 10;
         this.TURN_RATE = 0.3;
         this._thruster();
     }
@@ -49,7 +49,7 @@ class Player extends Phaser.Sprite {
         if (delta > Math.PI) delta -= Math.PI * 2;
         if (delta < -Math.PI) delta += Math.PI * 2;
    var evaluator = this.game.input.worldX - this.world.x ;
-        if (this.game.input.activePointer.rightButton.isDown && evaluator > 0) {
+        if (this.game.input.activePointer.rightButton.isDown/* && evaluator > 0*/) {
             this.wayMarker.rotation = this.game.physics.arcade.angleToPointer(this);
         }
         if (delta > 0) {

@@ -7,6 +7,7 @@ class UserInterface extends Phaser.Sprite {
         this.anchor.setTo(0.5, 0.5);
         console.log('ui loaded');
         this._addRadar();
+        this._addStatusBar();
     }
 
 
@@ -19,6 +20,11 @@ class UserInterface extends Phaser.Sprite {
         this.horizontalBar.fixedToCamera = true;
         this.verticalBar = this.game.add.sprite(7, 354, 'horizontalRadar');
         this.verticalBar.fixedToCamera = true;
+    }
+    
+    _addStatusBar(){
+        this.statusBar = this.game.add.image(212, 418, 'statusBar');
+        this.statusBar.fixedToCamera = true;
     }
     update() {
 
