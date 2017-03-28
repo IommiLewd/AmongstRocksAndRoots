@@ -18,7 +18,7 @@ class UserInterface extends Phaser.Sprite {
         this.radar.fixedToCamera = true;
         this.horizontalBar = this.game.add.sprite(7, 0, 'verticalRadar');
         this.horizontalBar.fixedToCamera = true;
-        this.verticalBar = this.game.add.sprite(7, 354, 'horizontalRadar');
+        this.verticalBar = this.game.add.sprite(3, 355, 'horizontalRadar');
         this.verticalBar.fixedToCamera = true;
     }
     

@@ -20,6 +20,9 @@ class Preload extends Phaser.State {
         this.load.image('verticalRadar', 'img/verticalRadar.png');
         this.load.image('horizontalRadar', 'img/horizontalRadar.png');
         this.load.image('statusBar', 'img/statusBar.png');
+      
+        this.load.image('healthPixel', 'img/UiItems/healthPixel.png');
+        this.load.image('shieldPixel', 'img/UiItems/shieldPixel.png');
 
         // Pointers :
 //         this.load.image('pointer', 'img/laserPointer.png');

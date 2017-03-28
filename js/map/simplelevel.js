@@ -19,7 +19,8 @@ class SimpleLevel extends Phaser.State {
 
     _addPlayer(x, y) {
         this.player = new Player(this.game, 20, this.game.height / 2, 'bulwark');
-        this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
+        //this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON);
+        this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
         this.game.camera.deadzone = new Phaser.Rectangle(140, 120, 100, 192);
         //this.starfield.anchor.setTo(0.5);
         //this.player.addChild(this.starfield);
@@ -32,7 +33,7 @@ class SimpleLevel extends Phaser.State {
     _checkCollision() {}
     _radarUpdate() {
         this.userInterface.horizontalBar.cameraOffset.y = 354 + this.player.y / this.game.height * 36;
-        this.userInterface.verticalBar.cameraOffset.x = 7 + this.player.x / this.game.width * 99;
+        this.userInterface.verticalBar.cameraOffset.x = 3 + this.player.x / this.game.width * 100;
         this.game.time.events.add(Phaser.Timer.SECOND * 2, this._radarUpdate, this);
         console.log('radar updated');
     }
@@ -61,7 +62,7 @@ class SimpleLevel extends Phaser.State {
     }
 
     render() {
-        var zone = this.game.camera.deadzone;
+        //var zone = this.game.camera.deadzone;
 
         //this.game.context.fillStyle = 'rgba(255,0,0,0.6)';
         //game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
