@@ -10,8 +10,6 @@ class UserInterface extends Phaser.Sprite {
         this._addStatusBar();
     }
 
-
-
     _addRadar() {
         this.radar = this.game.add.sprite(5, 360, 'radar');
         this.radar.anchor.setTo(0.0, 0.1);
@@ -21,11 +19,20 @@ class UserInterface extends Phaser.Sprite {
         this.verticalBar = this.game.add.sprite(3, 355, 'horizontalRadar');
         this.verticalBar.fixedToCamera = true;
     }
-    
-    _addStatusBar(){
-        this.statusBar = this.game.add.image(212, 418, 'statusBar');
+
+    _addStatusBar() {
+        this.statusBar = this.game.add.image(212, 418 + 1, 'statusBar');
         this.statusBar.fixedToCamera = true;
+        this.healthBar = this.game.add.tileSprite(221, 418 + 1, 180, 2, 'healthPixel');
+        this.healthBar.fixedToCamera = true;
+        this.shieldBar = this.game.add.tileSprite(417, 418 + 1, 156, 2, 'shieldPixel');
+        this.shieldBar.fixedToCamera = true;
     }
+    
+    
+    
+    
+
     update() {
 
     }
