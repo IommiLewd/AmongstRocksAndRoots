@@ -35,8 +35,6 @@ class Player extends Phaser.Sprite {
            this.turret.anchor.setTo(0.2, 0.5);
             this.turretGroup.add(this.turret);
              this.addChild(this.turretGroup);
-//            console.log(this.turretArray[0 ][0 ]);
-//            console.log(this.turretArray[0 ][1 ]);
             
 
 }
@@ -88,7 +86,6 @@ class Player extends Phaser.Sprite {
                 var distance = length - 118;
                 var speed = distance / 102 * 20;
                 this.speed = speed;
-                console.log(speed + '   ' + length);
                 this.emitter.lifespan = this.speed * 25;
                 if (this.speed < 1.5) {
                     this.speed = 0;
