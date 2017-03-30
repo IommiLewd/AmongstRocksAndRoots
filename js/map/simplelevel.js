@@ -53,13 +53,13 @@ class SimpleLevel extends Phaser.State {
     }
 
     update() {
-       // this._radarUpdate();
-//        this.starfield2.tilePosition.x = this.player.x * -this.player.speed / 6;
-//        this.starfield2.tilePosition.y = this.player.y * -this.player.speed / 6;
-//        this.starfield.tilePosition.x = this.player.x * -this.player.speed / 5;
-//        this.starfield.tilePosition.y = this.player.y * -this.player.speed / 5;
+        // this._radarUpdate();
+        //        this.starfield2.tilePosition.x = this.player.x * -this.player.speed / 6;
+        //        this.starfield2.tilePosition.y = this.player.y * -this.player.speed / 6;
+        //        this.starfield.tilePosition.x = this.player.x * -this.player.speed / 5;
+        //        this.starfield.tilePosition.y = this.player.y * -this.player.speed / 5;
 
-           this.starfield2.tilePosition.x = this.player.x * -20 /  6;
+        this.starfield2.tilePosition.x = this.player.x * -20 / 6;
         this.starfield2.tilePosition.y = this.player.y * -20 / 6;
         this.starfield.tilePosition.x = this.player.x * -20 / 5;
         this.starfield.tilePosition.y = this.player.y * -20 / 5;
@@ -67,8 +67,8 @@ class SimpleLevel extends Phaser.State {
 
     render() {
         var zone = this.game.camera.deadzone;
-        
-     this.game.debug.cameraInfo(game.camera, 32, 32);
+
+        //this.game.debug.cameraInfo(game.camera, 32, 32);
 
         //this.game.context.fillStyle = 'rgba(255,0,0,0.6)';
         //game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
