@@ -86,13 +86,21 @@ class Player extends Phaser.Sprite {
             this._nextFire = this.game.time.now + this.fireRate;
        
             this.bullet = this.bullets.getFirstDead();
-       
-            this.bullet.reset(this.turretArray[this.currentTurret][0] + this.x - this.width / 2, this.turretArray[this.currentTurret][1] + this.y - this.height / 2);
+            //console.log(this.turretGroup);
+     
+            //this.bullet.reset(this.turretArray[this.currentTurret][0] + this.x - this.width / 2, this.turretArray[this.currentTurret][1] + this.y - this.height / 2 );
+            //this.bullet.reset( this.turretArray[this.currentTurret][0] + this.x - this.width / 2,  this.turretArray[this.currentTurret][1] + this.y - this.height / 2 );
+            this.bullet.reset( this.turretGroup.children[this.currentTurret].world.x,  this.turretGroup.children[this.currentTurret].world.y );
             this.game.camera.shake(0.004, 40);
-            this.currentTurret++;
-                this.game.physics.arcade.velocityFromAngle(this.turret.angle, 1100, this.bullet.body.velocity);
-                this.bullet.angle = this.turret.angle;
-       
+           
+        
+                //this.game.physics.arcade.velocityFromAngle(this.turret.angle, 1100, this.bullet.body.velocity);
+           // console.log(this.turretGroup.children[this.currentTurret].rotation + ' ... ' + this.rotation);
+            var testRotation = this.turretGroup.children[this.currentTurret].rotation += this.rotation;
+                this.game.physics.arcade.velocityFromRotation(testRotation, 1100, this.bullet.body.velocity);
+                //this.game.physics.arcade.velocityFromAngle(this.turretGroup.children[1].angle/* -= this.angle*/, 1100, this.bullet.body.velocity);
+                this.bullet.angle = this.turretGroup.children[this.currentTurret].angle;
+        this.currentTurret++;
 
             this.bullet.bringToTop();
             this.bullets.add(this.bullet);
