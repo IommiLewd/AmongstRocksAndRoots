@@ -5,8 +5,8 @@ class Player extends Phaser.Sprite {
         game.physics.arcade.enable(this);
         this.body.collideWorldBounds = true;
         this.anchor.setTo(0.5, 0.5);
-        this.body.drag.set(0.8);
-        //this.body.drag.set(2);
+        //this.body.drag.set(0.8);
+        this.body.drag.set(2);
          this.turretGroup = this.game.add.group();
         this._laserPointer();
         this.turretArray = [
@@ -15,7 +15,7 @@ class Player extends Phaser.Sprite {
         this.speed = 10;
         this.TURN_RATE = 0.3;
         this._thruster();
-        this.body.maxVelocity.set(25);
+        this.body.maxVelocity.set(15);
         this._addTurrets();
     }
 
@@ -23,9 +23,15 @@ class Player extends Phaser.Sprite {
     _laserPointer() {
         this.wayMarker = this.game.add.image(130, 0, 'bigArrow');
         this.wayMarker.anchor.setTo(0.0, 0.5);
-        this.speedIndicator = this.game.add.tileSprite(114, -2, 55, 6, 'shieldPixel');
+        this.speedIndicator = this.game.add.tileSprite(114, -2, 55, 6, 'speedSprite');
         this.wayMarker.addChild(this.speedIndicator);
         this.speedIndicator.visible = false;
+        
+        this.wayMarkerEnd = this.game.add.image(210, 0, 'arrow');
+        this.wayMarkerEnd.anchor.setTo(0.5);
+        this.wayMarker.addChild(this.wayMarkerEnd);
+        this.wayMarkerEnd.visible = false;
+        
     }
     
     _addTurrets(){
@@ -76,17 +82,18 @@ class Player extends Phaser.Sprite {
         if (delta < -Math.PI) delta += Math.PI * 2;
         var evaluator = this.game.input.worldX - this.world.x;
         if (this.game.input.activePointer.rightButton.isDown /* && evaluator > 0*/ ) {
+             this.wayMarkerEnd.visible = true;
             this.speedIndicator.visible = true;
             this.wayMarker.rotation = this.game.physics.arcade.angleToPointer(this);
             var length = this.game.physics.arcade.distanceToPointer((this));
             if (length < 220 && length > 118) {
 
                 this.speedIndicator.width = 0;
-                this.speedIndicator.width = length - 118;
+                this.speedIndicator.width = length - 119;
                 var distance = length - 118;
                 var speed = distance / 102 * 20;
                 this.speed = speed;
-                this.emitter.lifespan = this.speed * 25;
+                this.emitter.lifespan = this.speed * 15;
                 if (this.speed < 1.5) {
                     this.speed = 0;
                     this.speedIndicator.width = 0;
@@ -98,6 +105,7 @@ class Player extends Phaser.Sprite {
 
         } else {
             this.speedIndicator.visible = false;
+             this.wayMarkerEnd.visible = false;
         }
 
 
@@ -110,19 +118,30 @@ class Player extends Phaser.Sprite {
             this.angle -= this.TURN_RATE;
         }
 
-        var firstEvaluator = Math.cos(this.rotation) * this.speed;
-        firstEvaluator = Math.abs(firstEvaluator);
-        var secondEvaluator = Math.abs(this.body.velocity.x);
-        if (firstEvaluator > secondEvaluator) {
-            this.body.velocity.x = Math.cos(this.rotation) * this.speed;
-            this.body.velocity.y = Math.sin(this.rotation) * this.speed;
-        }
+//        var firstEvaluator = Math.cos(this.rotation) * this.speed;
+//        firstEvaluator = Math.abs(firstEvaluator);
+//        var secondEvaluator = Math.abs(this.body.velocity.x);
+//        if (firstEvaluator > secondEvaluator) {
+            this.body.acceleration.x = Math.cos(this.rotation) * this.speed;
+            this.body.acceleration.y = Math.sin(this.rotation) * this.speed;
+//        }
     }
 }
 
 
 
 
+
+
+
+
+////        var firstEvaluator = Math.cos(this.rotation) * this.speed;
+////        firstEvaluator = Math.abs(firstEvaluator);
+////        var secondEvaluator = Math.abs(this.body.velocity.x);
+////        if (firstEvaluator > secondEvaluator) {
+//            this.body.velocity.x = Math.cos(this.rotation) * this.speed;
+//            this.body.velocity.y = Math.sin(this.rotation) * this.speed;
+////        }
 
 
 

@@ -59,10 +59,10 @@ class SimpleLevel extends Phaser.State {
         //        this.starfield.tilePosition.x = this.player.x * -this.player.speed / 5;
         //        this.starfield.tilePosition.y = this.player.y * -this.player.speed / 5;
 
-        this.starfield2.tilePosition.x = this.player.x * -20 / 6;
-        this.starfield2.tilePosition.y = this.player.y * -20 / 6;
-        this.starfield.tilePosition.x = this.player.x * -20 / 5;
-        this.starfield.tilePosition.y = this.player.y * -20 / 5;
+        this.starfield2.tilePosition.x = this.player.x * -40 / 6;
+        this.starfield2.tilePosition.y = this.player.y * -40 / 6;
+        this.starfield.tilePosition.x = this.player.x * -40 / 5;
+        this.starfield.tilePosition.y = this.player.y * -40 / 5;
     }
 
     render() {
