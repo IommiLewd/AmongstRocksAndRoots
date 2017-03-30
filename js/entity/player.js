@@ -7,7 +7,11 @@ class Player extends Phaser.Sprite {
         this.anchor.setTo(0.5, 0.5);
         //this.body.drag.set(0.8);
         this.body.drag.set(2);
-         this.turretGroup = this.game.add.group();
+
+        this.fireRate = 200;
+        this._nextFire = 0;
+
+        this.turretGroup = this.game.add.group();
         this._laserPointer();
         this.turretArray = [
                [119, 21], [137, 21], [56, 40], [15, 51]
@@ -17,6 +21,9 @@ class Player extends Phaser.Sprite {
         this._thruster();
         this.body.maxVelocity.set(15);
         this._addTurrets();
+        this._initBullets();
+        this.currentTurret = 0;
+
     }
 
 
@@ -26,25 +33,21 @@ class Player extends Phaser.Sprite {
         this.speedIndicator = this.game.add.tileSprite(114, -2, 55, 6, 'speedSprite');
         this.wayMarker.addChild(this.speedIndicator);
         this.speedIndicator.visible = false;
-        
         this.wayMarkerEnd = this.game.add.image(210, 0, 'arrow');
         this.wayMarkerEnd.anchor.setTo(0.5);
         this.wayMarker.addChild(this.wayMarkerEnd);
         this.wayMarkerEnd.visible = false;
-        
-    }
-    
-    _addTurrets(){
-       
-        for (var i = 0, len = this.turretArray.length; i < len; i++) {
-      this.turret = this.game.add.sprite(this.turretArray[i][0] - this.width/2, this.turretArray[i][1]- this.height/2, 'turret' );
-           this.turret.anchor.setTo(0.2, 0.5);
-            this.turretGroup.add(this.turret);
-             this.addChild(this.turretGroup);
-            
 
-}
-        
+    }
+
+    _addTurrets() {
+
+        for (var i = 0, len = this.turretArray.length; i < len; i++) {
+            this.turret = this.game.add.sprite(this.turretArray[i][0] - this.width / 2, this.turretArray[i][1] - this.height / 2, 'turret');
+            this.turret.anchor.setTo(0.2, 0.5);
+            this.turretGroup.add(this.turret);
+            this.addChild(this.turretGroup);
+        }
     }
 
     _thruster() {
@@ -69,20 +72,69 @@ class Player extends Phaser.Sprite {
     }
 
 
-    update() {
+
+
+
+
+    _fireWeapon() {
+        this.bullet;
+        console.log('pew pew');
+        if (this.game.time.now > this._nextFire) {
+            if(this.currentTurret >= this.turretGroup.length){
+                this.currentTurret = 0;
+            }
+            this._nextFire = this.game.time.now + this.fireRate;
        
-         this.turretGroup.forEach(function (turret) {
-             turret.rotation = this.game.physics.arcade.angleToPointer(this);
-             turret.rotation -= this.rotation;
-    }, this);
+            this.bullet = this.bullets.getFirstDead();
+       
+            this.bullet.reset(this.turretArray[this.currentTurret][0] + this.x - this.width / 2, this.turretArray[this.currentTurret][1] + this.y - this.height / 2);
+            this.game.camera.shake(0.004, 40);
+            this.currentTurret++;
+                this.game.physics.arcade.velocityFromAngle(this.turret.angle, 1100, this.bullet.body.velocity);
+                this.bullet.angle = this.turret.angle;
+       
+
+            this.bullet.bringToTop();
+            this.bullets.add(this.bullet);
+        }
+    }
+
+    _initBullets() {
+        this.bullets = this.game.add.group();
+        this.bullets.enableBody = true;
+        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.bullets.createMultiple(50, 'bullet');
+        this.bullets.setAll('checkWorldBounds', true);
+        this.bullets.setAll('outOfBoundsKill', true);
+        this.bullets.setAll('anchor.x', 0.5);
+        this.bullets.setAll('anchor.y', 0.5);
+        //  --- Disable Gravity for Each Bullet
+        this.bullets.forEach(function (L) {
+            L.body.allowGravity = false;
+        })
+    }
+
+
+
+
+
+
+
+
+
+    update() {
+        this.turretGroup.forEach(function (turret) {
+            turret.rotation = this.game.physics.arcade.angleToPointer(this);
+            turret.rotation -= this.rotation;
+        }, this);
         this.wayMarker.x = this.x;
         this.wayMarker.y = this.y;
         var delta = this.wayMarker.rotation - this.rotation;
         if (delta > Math.PI) delta -= Math.PI * 2;
         if (delta < -Math.PI) delta += Math.PI * 2;
-        var evaluator = this.game.input.worldX - this.world.x;
+        //var evaluator = this.game.input.worldX - this.world.x;
         if (this.game.input.activePointer.rightButton.isDown /* && evaluator > 0*/ ) {
-             this.wayMarkerEnd.visible = true;
+            this.wayMarkerEnd.visible = true;
             this.speedIndicator.visible = true;
             this.wayMarker.rotation = this.game.physics.arcade.angleToPointer(this);
             var length = this.game.physics.arcade.distanceToPointer((this));
@@ -92,9 +144,9 @@ class Player extends Phaser.Sprite {
                 this.speedIndicator.width = length - 119;
                 var distance = length - 118;
                 var speed = distance / 102 * 20;
-                this.speed = speed;
-                this.emitter.lifespan = this.speed * 15;
-                if (this.speed < 1.5) {
+                this.speed = speed / 5;
+                this.emitter.lifespan = this.speed * 45;
+                if (this.speed < 0.3) {
                     this.speed = 0;
                     this.speedIndicator.width = 0;
                     this.emitter.on = false;
@@ -102,15 +154,10 @@ class Player extends Phaser.Sprite {
                     this.emitter.on = true;
                 }
             }
-
         } else {
             this.speedIndicator.visible = false;
-             this.wayMarkerEnd.visible = false;
+            this.wayMarkerEnd.visible = false;
         }
-
-
-
-
 
         if (delta > 0) {
             this.angle += this.TURN_RATE;
@@ -118,32 +165,16 @@ class Player extends Phaser.Sprite {
             this.angle -= this.TURN_RATE;
         }
 
-//        var firstEvaluator = Math.cos(this.rotation) * this.speed;
-//        firstEvaluator = Math.abs(firstEvaluator);
-//        var secondEvaluator = Math.abs(this.body.velocity.x);
-//        if (firstEvaluator > secondEvaluator) {
-            this.body.acceleration.x = Math.cos(this.rotation) * this.speed;
-            this.body.acceleration.y = Math.sin(this.rotation) * this.speed;
-//        }
+        this.body.acceleration.x = Math.cos(this.rotation) * this.speed;
+        this.body.acceleration.y = Math.sin(this.rotation) * this.speed;
+
+        if (this.game.input.activePointer.leftButton.isDown) {
+            this._fireWeapon();
+        }
+
+
     }
 }
-
-
-
-
-
-
-
-
-////        var firstEvaluator = Math.cos(this.rotation) * this.speed;
-////        firstEvaluator = Math.abs(firstEvaluator);
-////        var secondEvaluator = Math.abs(this.body.velocity.x);
-////        if (firstEvaluator > secondEvaluator) {
-//            this.body.velocity.x = Math.cos(this.rotation) * this.speed;
-//            this.body.velocity.y = Math.sin(this.rotation) * this.speed;
-////        }
-
-
 
 
 
