@@ -16,7 +16,9 @@ class Preload extends Phaser.State {
         this.load.image('flame', 'img/flame.png');
         this.load.image('turret', 'img/turret.png');
         this.load.image('railgun', 'img/railGun.png');
+        this.load.image('disruptor', 'img/disruptor.png');
         this.load.image('bullet', 'img/bullet.png');
+        this.load.image('gunButton', 'img/gunButton.png');
         
         
         
