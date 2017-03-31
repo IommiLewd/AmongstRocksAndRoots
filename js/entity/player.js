@@ -14,12 +14,14 @@ class Player extends Phaser.Sprite {
         this.turretGroup = this.game.add.group();
         this._laserPointer();
         this.turretArray = [
-               [119, 21], [137, 21], [56, 40], [15, 51]
+            //TurretSizes: 0 is small, 1 is medium and 2 s
+              // [119, 21], [137, 21], [56, 40], [15, 51]
+               [119, 21, 1, 'AHEPT CANNON', 'turret'], [137, 21, 1, 'AHEPT CANNON', 'turret'], [56, 40, 0, 'Disruptor', 'turret'], [15, 51, 2, 'Medium Rail', 'railgun']
             ];
         this.speed = 10;
         this.TURN_RATE = 0.3;
         this._thruster();
-        this.body.maxVelocity.set(15);
+        this.body.maxVelocity.set(12);
         this._addTurrets();
         this._initBullets();
         this.currentTurret = 0;
@@ -41,9 +43,8 @@ class Player extends Phaser.Sprite {
     }
 
     _addTurrets() {
-
         for (var i = 0, len = this.turretArray.length; i < len; i++) {
-            this.turret = this.game.add.sprite(this.turretArray[i][0] - this.width / 2, this.turretArray[i][1] - this.height / 2, 'turret');
+            this.turret = this.game.add.sprite(this.turretArray[i][0] - this.width / 2, this.turretArray[i][1] - this.height / 2, this.turretArray[i][4]);
             this.turret.anchor.setTo(0.2, 0.5);
             this.turretGroup.add(this.turret);
             this.addChild(this.turretGroup);
@@ -78,30 +79,18 @@ class Player extends Phaser.Sprite {
 
     _fireWeapon() {
         this.bullet;
-        console.log('pew pew');
         if (this.game.time.now > this._nextFire) {
-            if(this.currentTurret >= this.turretGroup.length){
+            if (this.currentTurret >= this.turretGroup.length) {
                 this.currentTurret = 0;
             }
             this._nextFire = this.game.time.now + this.fireRate;
-       
             this.bullet = this.bullets.getFirstDead();
-            //console.log(this.turretGroup);
-     
-            //this.bullet.reset(this.turretArray[this.currentTurret][0] + this.x - this.width / 2, this.turretArray[this.currentTurret][1] + this.y - this.height / 2 );
-            //this.bullet.reset( this.turretArray[this.currentTurret][0] + this.x - this.width / 2,  this.turretArray[this.currentTurret][1] + this.y - this.height / 2 );
-            this.bullet.reset( this.turretGroup.children[this.currentTurret].world.x,  this.turretGroup.children[this.currentTurret].world.y );
+            this.bullet.reset(this.turretGroup.children[this.currentTurret].world.x, this.turretGroup.children[this.currentTurret].world.y);
             this.game.camera.shake(0.004, 40);
-           
-        
-                //this.game.physics.arcade.velocityFromAngle(this.turret.angle, 1100, this.bullet.body.velocity);
-           // console.log(this.turretGroup.children[this.currentTurret].rotation + ' ... ' + this.rotation);
             var testRotation = this.turretGroup.children[this.currentTurret].rotation += this.rotation;
-                this.game.physics.arcade.velocityFromRotation(testRotation, 1100, this.bullet.body.velocity);
-                //this.game.physics.arcade.velocityFromAngle(this.turretGroup.children[1].angle/* -= this.angle*/, 1100, this.bullet.body.velocity);
-                this.bullet.angle = this.turretGroup.children[this.currentTurret].angle;
-        this.currentTurret++;
-
+            this.game.physics.arcade.velocityFromRotation(testRotation, 1100, this.bullet.body.velocity);
+            this.bullet.angle = this.turretGroup.children[this.currentTurret].angle;
+            this.currentTurret++;
             this.bullet.bringToTop();
             this.bullets.add(this.bullet);
         }
@@ -119,6 +108,7 @@ class Player extends Phaser.Sprite {
         //  --- Disable Gravity for Each Bullet
         this.bullets.forEach(function (L) {
             L.body.allowGravity = false;
+
         })
     }
 
