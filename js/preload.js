@@ -19,6 +19,7 @@ class Preload extends Phaser.State {
         this.load.image('disruptor', 'img/disruptor.png');
         this.load.image('bullet', 'img/bullet.png');
         this.load.image('gunButton', 'img/gunButton.png');
+        this.load.spritesheet('bulletTile', 'img/bulletSheet.png', 36, 2);
         
         
         

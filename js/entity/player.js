@@ -19,10 +19,10 @@ class Player extends Phaser.Sprite {
               // [119, 21], [137, 21], [56, 40], [15, 51]
 
             //   0 - TurretX, 1 - TurretY, 2 - Turret Name, 3 - turret key, 4 - bullet key/frame, 5 - Bullet Speed, 6 - RateOfFire 
-            [119, 21, 1, 'AHEPT CANNON', 'turret', 0, 900, 350],
-            [137, 21, 1, 'AHEPT CANNON', 'turret', 0, 900, 350],
-            [56, 40, 0, 'Disruptor', 'disruptor', 0, 1000, 100],
-            [15, 51, 2, 'Medium Rail', 'railgun', 0, 800, 800]
+            [119, 21, 1, 'AHEPT CANNON', 'turret', 2, 1100, 350],
+            [137, 21, 1, 'AHEPT CANNON', 'turret', 2, 1100, 350],
+            [56, 40, 0, 'Disruptor', 'disruptor', 1, 1000, 100],
+            [15, 51, 2, 'Medium Rail', 'railgun', 0, 750, 800]
 
 
             ];
@@ -65,14 +65,8 @@ class Player extends Phaser.Sprite {
                 boundsAlignH: "center"
             });
             this.textGroup.add(this.gunText);
+            this.gunText.bringToTop();
             this.gunText.fixedToCamera = true;
-
-
-
-
-
-
-
         }
     }
 
@@ -108,7 +102,6 @@ class Player extends Phaser.Sprite {
             if (this.currentTurret >= this.turretGroup.length) {
                 this.currentTurret = 0;
             }
-            console.log(this.turretArray[this.currentTurret][7]);
             this._nextFire = this.game.time.now + this.turretArray[this.currentTurret][7];
             this.bullet = this.bullets.getFirstDead();
             this.bullet.reset(this.turretGroup.children[this.currentTurret].world.x, this.turretGroup.children[this.currentTurret].world.y);
@@ -116,20 +109,19 @@ class Player extends Phaser.Sprite {
             var testRotation = this.turretGroup.children[this.currentTurret].rotation += this.rotation;
             this.game.physics.arcade.velocityFromRotation(testRotation, this.turretArray[this.currentTurret][6], this.bullet.body.velocity);
             this.bullet.angle = this.turretGroup.children[this.currentTurret].angle;
-              //this.textGroup.children[this.currentTurret].visible = false;
-              this.textGroup.children[this.currentTurret].fill = '#00FF00';
-            
+            this.textGroup.children[this.currentTurret].fill = '#00FF00';
+            this.bullet.frame = this.turretArray[this.currentTurret][5];
             var rateOfindicator = this.turretArray[this.currentTurret][7] / 1000;
             var temporary = this.currentTurret;
-            this.game.time.events.add(Phaser.Timer.SECOND * rateOfindicator, function(){
-                console.log('textroupEvent');
-                 this.textGroup.children[temporary].fill = '#f27519';
-                
+            this.game.time.events.add(Phaser.Timer.SECOND * rateOfindicator, function () {
+
+                this.textGroup.children[temporary].fill = '#f27519';
+
             }, this);
             this.currentTurret++;
             this.bullet.bringToTop();
             this.bullets.add(this.bullet);
-          
+
         }
     }
 
@@ -137,7 +129,7 @@ class Player extends Phaser.Sprite {
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
         this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-        this.bullets.createMultiple(50, 'bullet');
+        this.bullets.createMultiple(50, 'bulletTile');
         this.bullets.setAll('checkWorldBounds', true);
         this.bullets.setAll('outOfBoundsKill', true);
         this.bullets.setAll('anchor.x', 0.5);
@@ -148,14 +140,6 @@ class Player extends Phaser.Sprite {
 
         })
     }
-
-
-
-
-
-
-
-
 
     update() {
         this.turretGroup.forEach(function (turret) {
@@ -210,9 +194,3 @@ class Player extends Phaser.Sprite {
 
     }
 }
-
-
-
-//        if (this.game.input.activePointer.leftButton.isDown) {
-//            //  this._fireWeapon();
-//        }
