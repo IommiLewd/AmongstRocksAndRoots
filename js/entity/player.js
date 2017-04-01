@@ -18,11 +18,11 @@ class Player extends Phaser.Sprite {
             //TurretSizes: 0 is small, 1 is medium and 2 s
               // [119, 21], [137, 21], [56, 40], [15, 51]
 
-            //   0 - TurretX, 1 - TurretY, 2 - Turret Name, 3 - turret key, 4 - bullet key/frame, 5 - Bullet Speed 
-            [119, 21, 1, 'AHEPT CANNON', 'turret', 0, 1100, 350],
-            [137, 21, 1, 'AHEPT CANNON', 'turret', 0, 1100, 350],
-            [56, 40, 0, 'Disruptor', 'disruptor', 0, 1100, 100],
-            [15, 51, 2, 'Medium Rail', 'railgun', 0, 1100, 600]
+            //   0 - TurretX, 1 - TurretY, 2 - Turret Name, 3 - turret key, 4 - bullet key/frame, 5 - Bullet Speed, 6 - RateOfFire 
+            [119, 21, 1, 'AHEPT CANNON', 'turret', 0, 900, 350],
+            [137, 21, 1, 'AHEPT CANNON', 'turret', 0, 900, 350],
+            [56, 40, 0, 'Disruptor', 'disruptor', 0, 1000, 100],
+            [15, 51, 2, 'Medium Rail', 'railgun', 0, 800, 800]
 
 
             ];
@@ -108,20 +108,22 @@ class Player extends Phaser.Sprite {
             if (this.currentTurret >= this.turretGroup.length) {
                 this.currentTurret = 0;
             }
+            console.log(this.turretArray[this.currentTurret][7]);
             this._nextFire = this.game.time.now + this.turretArray[this.currentTurret][7];
             this.bullet = this.bullets.getFirstDead();
             this.bullet.reset(this.turretGroup.children[this.currentTurret].world.x, this.turretGroup.children[this.currentTurret].world.y);
             this.game.camera.shake(0.004, 40);
             var testRotation = this.turretGroup.children[this.currentTurret].rotation += this.rotation;
-            this.game.physics.arcade.velocityFromRotation(testRotation, 1100, this.bullet.body.velocity);
+            this.game.physics.arcade.velocityFromRotation(testRotation, this.turretArray[this.currentTurret][6], this.bullet.body.velocity);
             this.bullet.angle = this.turretGroup.children[this.currentTurret].angle;
-              this.textGroup.children[this.currentTurret].visible = false;
+              //this.textGroup.children[this.currentTurret].visible = false;
+              this.textGroup.children[this.currentTurret].fill = '#00FF00';
             
             var rateOfindicator = this.turretArray[this.currentTurret][7] / 1000;
             var temporary = this.currentTurret;
             this.game.time.events.add(Phaser.Timer.SECOND * rateOfindicator, function(){
                 console.log('textroupEvent');
-                 this.textGroup.children[temporary].visible = true;
+                 this.textGroup.children[temporary].fill = '#f27519';
                 
             }, this);
             this.currentTurret++;
